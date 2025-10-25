@@ -52,27 +52,10 @@ npm run install:all
 ### 3. Configure Environment Variables
 
 #### Frontend (.env in /frontend)
-```
-VITE_FIREBASE_API_KEY=your_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
-VITE_FIREBASE_APP_ID=1:123456789:web:abcdef
-VITE_API_URL=http://localhost:4000/api
-VITE_SOCKET_URL=http://localhost:4000
-```
+Create a `.env` file in the frontend directory with your Firebase configuration. See `frontend/.env.example` for the required variables.
 
 #### Backend (.env in /backend)
-```
-PORT=4000
-NODE_ENV=development
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/campus-resale-hub
-FIREBASE_PROJECT_ID=your_project_id
-FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@your_project.iam.gserviceaccount.com
-FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
-CORS_ORIGIN=http://localhost:5173
-```
+Create a `.env` file in the backend directory with your database and Firebase Admin SDK configuration. See `backend/.env.example` for the required variables.
 
 ### 4. Run the Application
 
