@@ -1,0 +1,54 @@
+{
+  "deploymentProtection": {
+    "production": {
+      "requiredChecks": [
+        {
+          "name": "Build Success",
+          "description": "Frontend and backend must build successfully",
+          "type": "github_action",
+          "workflow": "deployment-checks.yml",
+          "job": "frontend-checks"
+        },
+        {
+          "name": "Security Scan",
+          "description": "No high/critical security vulnerabilities",
+          "type": "github_action", 
+          "workflow": "deployment-checks.yml",
+          "job": "code-quality"
+        },
+        {
+          "name": "Code Quality",
+          "description": "TypeScript compilation must pass",
+          "type": "github_action",
+          "workflow": "deployment-checks.yml",
+          "job": "frontend-checks"
+        },
+        {
+          "name": "Environment Validation",
+          "description": "Required environment variables must be configured",
+          "type": "manual",
+          "description": "Verify Firebase and API configurations are set"
+        }
+      ],
+      "blockingRules": [
+        {
+          "condition": "branch != 'main'",
+          "message": "Only main branch deployments allowed to production"
+        },
+        {
+          "condition": "commit_message contains 'WIP' or 'DRAFT'",
+          "message": "Work in progress commits not allowed in production"
+        },
+        {
+          "condition": "security_vulnerabilities > 0",
+          "message": "Security vulnerabilities must be resolved before deployment"
+        }
+      ],
+      "approvalRequired": {
+        "enabled": true,
+        "requiredApprovers": 1,
+        "approverGroups": ["maintainers"]
+      }
+    }
+  }
+}

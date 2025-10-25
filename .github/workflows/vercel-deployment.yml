@@ -1,0 +1,105 @@
+name: Vercel Deployment Protection
+
+on:
+  deployment_status:
+    types: [requested, in_progress, success, failure]
+
+jobs:
+  deployment-protection:
+    runs-on: ubuntu-latest
+    if: github.event.deployment.environment == 'production'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.deployment.sha }}
+
+    - name: Pre-deployment checks
+      run: |
+        echo "🔍 Running pre-deployment checks..."
+        
+        # Check if this is a main branch deployment
+        if [ "${{ github.ref }}" != "refs/heads/main" ]; then
+          echo "❌ Only main branch deployments are allowed to production"
+          exit 1
+        fi
+        
+        # Check commit message for deployment keywords
+        COMMIT_MSG=$(git log -1 --pretty=%B)
+        if [[ "$COMMIT_MSG" == *"WIP"* ]] || [[ "$COMMIT_MSG" == *"DRAFT"* ]]; then
+          echo "❌ Work in progress commits not allowed in production"
+          exit 1
+        fi
+        
+        echo "✅ Pre-deployment checks passed"
+
+    - name: Security scan
+      run: |
+        echo "🔒 Running security scan..."
+        
+        # Check for common security issues
+        if grep -r "password.*=" . --exclude-dir=node_modules --exclude-dir=.git --exclude="*.example"; then
+          echo "❌ Potential hardcoded passwords found"
+          exit 1
+        fi
+        
+        if grep -r "api[_-]key.*=" . --exclude-dir=node_modules --exclude-dir=.git --exclude="*.example"; then
+          echo "❌ Potential hardcoded API keys found"
+          exit 1
+        fi
+        
+        echo "✅ Security scan passed"
+
+    - name: Environment validation
+      run: |
+        echo "🌍 Validating environment configuration..."
+        
+        # Check if required files exist
+        if [ ! -f "frontend/.env.example" ]; then
+          echo "❌ Frontend .env.example not found"
+          exit 1
+        fi
+        
+        if [ ! -f "backend/.env.example" ]; then
+          echo "❌ Backend .env.example not found"
+          exit 1
+        fi
+        
+        echo "✅ Environment configuration validated"
+
+    - name: Build verification
+      run: |
+        echo "🔨 Verifying build process..."
+        
+        # Test frontend build
+        cd frontend
+        npm ci
+        npm run build
+        
+        if [ ! -d "build" ]; then
+          echo "❌ Frontend build failed"
+          exit 1
+        fi
+        
+        # Test backend build
+        cd ../backend
+        npm ci
+        npm run build
+        
+        if [ ! -d "dist" ]; then
+          echo "❌ Backend build failed"
+          exit 1
+        fi
+        
+        echo "✅ Build verification passed"
+
+    - name: Approve deployment
+      run: |
+        echo "✅ All deployment checks passed!"
+        echo "🚀 Deployment approved for production"
+        echo "📊 Deployment Summary:"
+        echo "  - Branch: ${{ github.ref }}"
+        echo "  - Commit: ${{ github.event.deployment.sha }}"
+        echo "  - Author: ${{ github.actor }}"
+        echo "  - Time: $(date)"
