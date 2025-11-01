@@ -7,7 +7,7 @@ import { Badge } from './ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { useApp } from '../App';
-import { 
+  import { 
   ArrowLeft, 
   Edit3, 
   Star, 
@@ -19,7 +19,9 @@ import {
   Trophy,
   TrendingUp,
   Users,
-  DollarSign
+  DollarSign,
+  Trash2,
+  AlertTriangle
 } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { toast } from "sonner";
@@ -109,6 +111,22 @@ export function Profile() {
       toast.success('Purchase confirmed');
     } catch (e: any) {
       toast.error(e?.response?.data?.error || 'Failed to verify OTP');
+    }
+  };
+
+  const deleteListing = async (id: string) => {
+    const confirmDelete = window.confirm(
+      'Are you sure you want to delete this listing? This action cannot be undone.'
+    );
+    
+    if (!confirmDelete) return;
+    
+    try {
+      await api.listings.delete(id);
+      setMyListings(prev => prev.filter(l => l.id !== id));
+      toast.success('Listing deleted successfully');
+    } catch (e: any) {
+      toast.error(e?.response?.data?.error || 'Failed to delete listing');
     }
   };
 
@@ -320,7 +338,7 @@ export function Profile() {
                       </div>
                       
                       <div className="flex space-x-2">
-<Button size="sm" variant="outline" className="flex-1 border-emerald-300 text-emerald-700">
+                        <Button size="sm" variant="outline" className="flex-1 border-emerald-300 text-emerald-700">
                           Edit
                         </Button>
                         {listing.status === 'Active' && (
@@ -330,6 +348,14 @@ export function Profile() {
                             Mark as Sold/Received
                           </Button>
                         )}
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="flex-1 border-red-300 text-red-700 hover:bg-red-50"
+                          onClick={() => deleteListing(String(listing.id))}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>

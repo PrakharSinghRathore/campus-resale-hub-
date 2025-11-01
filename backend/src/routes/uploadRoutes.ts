@@ -4,7 +4,7 @@ import { configureCloudinary } from '../config/cloudinary';
 
 const router = Router();
 
-router.post('/signature', authenticateToken, async (req, res) => {
+router.post('/signature', authenticateToken, async (req: any, res: any) => {
   try {
     const cloudinary = configureCloudinary();
     const timestamp = Math.round(new Date().getTime() / 1000);

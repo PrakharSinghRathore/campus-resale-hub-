@@ -1,0 +1,32 @@
+graph LR
+    subgraph Level0["🎯 Level-0: System Context"]
+        User["👤 Campus Users"]
+        System["📱 Campus Resale<br/>Hub System"]
+        Firebase["🔐 Firebase Auth"]
+        MongoDB["💾 MongoDB"]
+        Cloudinary["☁️ Cloudinary"]
+        
+        User <-->|Auth| Firebase
+        User <-->|Browse/Sell| System
+        System <-->|Verify| Firebase
+        System <-->|Data| MongoDB
+        System <-->|Images| Cloudinary
+    end
+    
+    subgraph Level1["📊 Level-1: Key Processes"]
+        P1["🔐 Authentication"]
+        P2["📝 Listing Mgmt"]
+        P3["🔍 Search/Filter"]
+        P4["💬 Chat & Msg"]
+        P5["🛒 Purchase/OTP"]
+        P6["⚙️ Admin Panel"]
+        P7["⚠️ Reports"]
+    end
+    
+    style User fill:#e3f2fd
+    style System fill:#fff3e0
+    style Firebase fill:#f3e5f5
+    style MongoDB fill:#e8f5e9
+    style Cloudinary fill:#fce4ec
+    style Level0 fill:#f5f5f5,stroke:#999
+    style Level1 fill:#f9f9f9,stroke:#999

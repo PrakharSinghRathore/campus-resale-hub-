@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 const router = Router();
 
 // Create a new report
-router.post('/', authenticateToken, async (req, res) => {
+router.post('/', authenticateToken, async (req: any, res: any) => {
   try {
     const { targetType, targetId, reason, details } = req.body;
     if (!['listing', 'user'].includes(targetType)) return res.status(400).json({ error: 'Invalid targetType' });
@@ -29,14 +29,14 @@ return res.status(201).json({ message: 'Report submitted', report });
 });
 
 // Admin: list reports
-router.get('/', authenticateToken, requireAdmin, async (req, res) => {
+router.get('/', authenticateToken, requireAdmin, async (req: any, res: any) => {
   const { status = 'open' } = req.query;
   const reports = await Report.find(status ? { status } : {}).sort({ createdAt: -1 }).limit(500);
 return res.json(reports);
 });
 
 // Admin: update report status
-router.put('/:id', authenticateToken, requireAdmin, async (req, res) => {
+router.put('/:id', authenticateToken, requireAdmin, async (req: any, res: any) => {
   const { id } = req.params;
   if (!mongoose.isValidObjectId(id)) return res.status(400).json({ error: 'Invalid id' });
   const { status } = req.body;

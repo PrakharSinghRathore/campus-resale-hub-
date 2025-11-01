@@ -1,0 +1,114 @@
+erDiagram
+    USER ||--o{ LISTING : "sells"
+    USER ||--o{ CHAT : "participates"
+    USER ||--o{ MESSAGE : "sends"
+    USER ||--o{ PURCHASE : "buys"
+    USER ||--o{ REPORT : "creates"
+    USER ||--o{ LISTING : "favorites"
+    
+    LISTING ||--o{ CHAT : "associated"
+    LISTING ||--o{ MESSAGE : "discussed"
+    LISTING ||--o{ PURCHASE : "purchased"
+    LISTING ||--o{ REPORT : "reported"
+    
+    CHAT ||--o{ MESSAGE : "contains"
+    MESSAGE ||--o{ USER : "read-by"
+    
+    PURCHASE ||--|| LISTING : "references"
+    PURCHASE ||--|| USER : "seller"
+    PURCHASE ||--|| USER : "buyer"
+    
+    REPORT ||--|| USER : "reporter"
+    REPORT ||--|| LISTING : "target-listing"
+    REPORT ||--|| USER : "target-user"
+
+    USER {
+        string _id PK
+        string firebaseUid UK
+        string email UK
+        string name
+        string avatar
+        string hostelBlock
+        float rating
+        int ratingCount
+        boolean isAdmin
+        boolean isActive
+        date lastActive
+        array favoriteListings FK
+        date createdAt
+        date updatedAt
+    }
+
+    LISTING {
+        string _id PK
+        string sellerId FK
+        string title
+        string description
+        float price
+        array images
+        string category
+        string condition
+        string hostelBlock
+        boolean isActive
+        boolean isSold
+        int views
+        int favoriteCount
+        array tags
+        date createdAt
+        date updatedAt
+    }
+
+    CHAT {
+        string _id PK
+        array participants FK "User IDs"
+        string listingId FK
+        string lastMessage
+        date lastMessageAt
+        string lastMessageSenderId FK
+        boolean isActive
+        map unreadCount "User ID -> Count"
+        date createdAt
+        date updatedAt
+    }
+
+    MESSAGE {
+        string _id PK
+        string chatId FK
+        string senderId FK
+        string text
+        array images
+        string messageType "text, image, system"
+        boolean isRead
+        array readBy FK "User IDs"
+        date readAt
+        date editedAt
+        boolean isDeleted
+        date createdAt
+        date updatedAt
+    }
+
+    PURCHASE {
+        string _id PK
+        string listingId FK
+        string sellerId FK
+        string buyerId FK
+        string buyerFirebaseUid
+        string otpHash
+        string otpSalt
+        date expiresAt
+        string status "pending, confirmed, expired, cancelled"
+        date createdAt
+        date updatedAt
+    }
+
+    REPORT {
+        string _id PK
+        string reporterId FK
+        string targetType "listing, user"
+        string targetId FK
+        string reason
+        string details
+        string status "open, reviewing, resolved, dismissed"
+        date createdAt
+        date updatedAt
+    }

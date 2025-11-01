@@ -266,7 +266,7 @@ export const logUserActivity = (action: string) => {
       
       // Update user's last active timestamp
       req.user.lastActive = new Date();
-      req.user.save({ validateBeforeSave: false }).catch(err => {
+      req.user.save({ validateBeforeSave: false }).catch((err: any) => {
         console.error('Error updating user last active:', err);
       });
     }

@@ -5,13 +5,13 @@ import User from '../models/User';
 
 const router = Router();
 
-router.get('/profile', authenticateToken, async (req, res) => {
+router.get('/profile', authenticateToken, async (req: any, res: any) => {
   return res.json(req.user);
 });
 
 router.put('/profile', authenticateToken, updateProfile);
 
-router.get('/:id', authenticateToken, async (req, res) => {
+router.get('/:id', authenticateToken, async (req: any, res: any) => {
   const user = await User.findById(req.params.id);
   if (!user) return res.status(404).json({ error: 'User not found' });
 return res.json({

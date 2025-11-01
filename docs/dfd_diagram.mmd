@@ -1,0 +1,142 @@
+graph TD
+    subgraph "Level-0: Context Diagram"
+        A["👤 Buyer/Seller<br/>Campus User"]
+        B["📱 Campus Resale<br/>Hub System"]
+        C["🔐 Firebase<br/>Authentication"]
+        D["💾 MongoDB<br/>Database"]
+        E["☁️ Cloudinary<br/>Image Storage"]
+        F["🔔 Real-time<br/>Socket.IO"]
+        
+        A <-->|Login/Register| C
+        A <-->|Browse/Post Listings| B
+        A <-->|Chat & Messages| B
+        B <-->|Auth Verification| C
+        B <-->|Read/Write Data| D
+        B <-->|Upload/Store Images| E
+        B <-->|Real-time Updates| F
+        A <-->|Live Notifications| F
+    end
+
+    subgraph "Level-1: Main Processes"
+        subgraph "1️⃣ Authentication<br/>Process"
+            A1["User Input"]
+            A2["Verify Email"]
+            A3["Firebase Auth"]
+            A4["Create/Update<br/>User Record"]
+            A5["Return JWT Token"]
+            
+            A1 --> A2
+            A2 --> A3
+            A3 --> A4
+            A4 --> A5
+        end
+        
+        subgraph "2️⃣ Listing<br/>Management"
+            L1["User Listing Data"]
+            L2["Validate Input"]
+            L3["Upload Images"]
+            L4["Store in MongoDB"]
+            L5["Index & Search"]
+            L6["Return Listing"]
+            
+            L1 --> L2
+            L2 --> L3
+            L3 --> L4
+            L4 --> L5
+            L5 --> L6
+        end
+        
+        subgraph "3️⃣ Search & Filter"
+            S1["Search Query"]
+            S2["Apply Filters"]
+            S3["Text Search/Index"]
+            S4["Fetch Results"]
+            S5["Populate User Info"]
+            S6["Return Listings"]
+            
+            S1 --> S2
+            S2 --> S3
+            S3 --> S4
+            S4 --> S5
+            S5 --> S6
+        end
+        
+        subgraph "4️⃣ Chat & Messaging"
+            C1["Message Input"]
+            C2["Create/Get Chat"]
+            C3["Save Message"]
+            C4["Update Unread Count"]
+            C5["Emit Socket Event"]
+            C6["Real-time Delivery"]
+            
+            C1 --> C2
+            C2 --> C3
+            C3 --> C4
+            C4 --> C5
+            C5 --> C6
+        end
+        
+        subgraph "5️⃣ Purchase & OTP"
+            P1["Initiate Purchase"]
+            P2["Generate OTP"]
+            P3["Send OTP"]
+            P4["Verify OTP"]
+            P5["Confirm Purchase"]
+            P6["Update Listing Status"]
+            
+            P1 --> P2
+            P2 --> P3
+            P3 --> P4
+            P4 --> P5
+            P5 --> P6
+        end
+        
+        subgraph "6️⃣ Admin Management"
+            AD1["Admin Request"]
+            AD2["Verify Admin Role"]
+            AD3["Process Action"]
+            AD4["Update Records"]
+            AD5["Return Result"]
+            
+            AD1 --> AD2
+            AD2 --> AD3
+            AD3 --> AD4
+            AD4 --> AD5
+        end
+        
+        subgraph "7️⃣ Reporting"
+            R1["Report Input"]
+            R2["Validate Report"]
+            R3["Store Report"]
+            R4["Notify Admin"]
+            R5["Update Status"]
+            
+            R1 --> R2
+            R2 --> R3
+            R3 --> R4
+            R4 --> R5
+        end
+    end
+
+    subgraph "Data Stores"
+        DS1["User Collection"]
+        DS2["Listing Collection"]
+        DS3["Chat Collection"]
+        DS4["Message Collection"]
+        DS5["Purchase Collection"]
+        DS6["Report Collection"]
+    end
+
+    style A fill:#e1f5ff
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#e8f5e9
+    style E fill:#fce4ec
+    style F fill:#fff9c4
+    
+    style DS1 fill:#c8e6c9
+    style DS2 fill:#c8e6c9
+    style DS3 fill:#c8e6c9
+    style DS4 fill:#c8e6c9
+    style DS5 fill:#c8e6c9
+    style DS6 fill:#c8e6c9
