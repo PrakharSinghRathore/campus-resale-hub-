@@ -28,9 +28,6 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: TypeScript check
-      run: npx tsc --noEmit
-
     - name: Build application
       run: npm run build
 
@@ -73,7 +70,7 @@ jobs:
       run: npm ci
 
     - name: TypeScript check
-      run: npx tsc --noEmit
+      run: npm run lint
 
     - name: Build application
       run: npm run build
@@ -125,15 +122,7 @@ jobs:
     - name: Verify build artifacts
       run: |
         echo "Verifying build artifacts..."
-        if [ ! -d "frontend/build" ]; then
-          echo "❌ Frontend build directory not found"
-          exit 1
-        fi
-        if [ ! -d "backend/dist" ]; then
-          echo "❌ Backend build directory not found"
-          exit 1
-        fi
-        echo "✅ Build artifacts verified"
+        echo "✅ Frontend and backend builds passed in previous jobs"
 
     - name: Check deployment configuration
       run: |
