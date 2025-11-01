@@ -20,7 +20,7 @@
   "author": "Campus Resale Hub",
   "license": "MIT",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.10",
